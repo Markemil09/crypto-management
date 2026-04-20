@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Lead &amp; Contact Management | The Kinetic Vault</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-primary-container": "#00575b",
+                      "tertiary-container": "#f94d4e",
+                      "surface": "#0c0e17",
+                      "on-tertiary": "#490006",
+                      "primary": "#a1faff",
+                      "inverse-on-surface": "#53545f",
+                      "on-surface-variant": "#aaaab7",
+                      "error-dim": "#d7383b",
+                      "background": "#0c0e17",
+                      "outline-variant": "#464752",
+                      "tertiary-fixed-dim": "#ff7b75",
+                      "surface-dim": "#0c0e17",
+                      "surface-container-highest": "#222532",
+                      "secondary-container": "#006d35",
+                      "on-tertiary-fixed-variant": "#790010",
+                      "on-tertiary-fixed": "#3a0004",
+                      "surface-container-low": "#11131d",
+                      "secondary-fixed": "#3fff8b",
+                      "on-secondary-container": "#e3ffe4",
+                      "surface-bright": "#282b3a",
+                      "on-secondary": "#005d2c",
+                      "secondary-dim": "#24f07e",
+                      "secondary-fixed-dim": "#24f07e",
+                      "on-error-container": "#ffa8a3",
+                      "secondary": "#3fff8b",
+                      "primary-dim": "#00e5ee",
+                      "error": "#ff716c",
+                      "on-secondary-fixed": "#004820",
+                      "on-primary": "#006165",
+                      "on-error": "#490006",
+                      "surface-container-lowest": "#000000",
+                      "inverse-surface": "#faf8ff",
+                      "on-tertiary-container": "#110000",
+                      "surface-container": "#171924",
+                      "on-surface": "#f0f0fd",
+                      "on-background": "#f0f0fd",
+                      "surface-variant": "#222532",
+                      "tertiary-fixed": "#ff928c",
+                      "on-primary-fixed": "#004346",
+                      "inverse-primary": "#006a6e",
+                      "on-secondary-fixed-variant": "#006832",
+                      "surface-tint": "#a1faff",
+                      "tertiary": "#ff716c",
+                      "outline": "#737580",
+                      "primary-fixed-dim": "#00e5ee",
+                      "primary-container": "#00f4fe",
+                      "surface-container-high": "#1c1f2b",
+                      "on-primary-fixed-variant": "#006266",
+                      "error-container": "#9f0519",
+                      "tertiary-dim": "#ff716c",
+                      "primary-fixed": "#00f4fe"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "fontFamily": {
+                      "headline": ["Space Grotesk"],
+                      "body": ["Inter"],
+                      "label": ["Inter"]
+              }
+            },
+          },
+        }
+      </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3, .font-headline { font-family: 'Space Grotesk', sans-serif; }
+        .glass-panel {
+            background: rgba(34, 37, 50, 0.6);
+            backdrop-filter: blur(12px);
+        }
+        .tabular-nums { font-variant-numeric: tabular-nums; }
+      </style>
+</head>
+<body class="bg-background text-on-background selection:bg-primary selection:text-on-primary-fixed">
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-0 h-screen w-72 bg-[#0c0e17] flex flex-col h-full py-8 px-6 space-y-8 hidden md:flex z-50">
+<div class="flex flex-col space-y-1">
+<span class="text-lg font-black text-cyan-400 uppercase tracking-widest">Kinetic Vault</span>
+<span class="text-xs text-on-surface-variant font-medium tracking-widest opacity-60">PRO COMMAND CENTER</span>
+</div>
+<nav class="flex-1 space-y-2">
+<a class="flex items-center gap-4 py-3 px-4 text-slate-500 font-medium hover:text-white hover:bg-slate-800/40 rounded-lg transition-all duration-200 group" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label">Dashboard</span>
+</a>
+<a class="flex items-center gap-4 py-3 px-4 text-slate-500 font-medium hover:text-white hover:bg-slate-800/40 rounded-lg transition-all duration-200 group" href="#">
+<span class="material-symbols-outlined">account_balance</span>
+<span class="font-label">Portfolio</span>
+</a>
+<!-- Active Tab: Lead Management -->
+<a class="flex items-center gap-4 py-3 px-4 text-cyan-400 font-bold border-r-4 border-cyan-400 pr-4 hover:bg-slate-800/40 transition-all duration-200" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">hub</span>
+<span class="font-label">Lead Management</span>
+</a>
+<a class="flex items-center gap-4 py-3 px-4 text-slate-500 font-medium hover:text-white hover:bg-slate-800/40 rounded-lg transition-all duration-200 group" href="#">
+<span class="material-symbols-outlined">query_stats</span>
+<span class="font-label">Market Pulse</span>
+</a>
+<a class="flex items-center gap-4 py-3 px-4 text-slate-500 font-medium hover:text-white hover:bg-slate-800/40 rounded-lg transition-all duration-200 group" href="#">
+<span class="material-symbols-outlined">enhanced_encryption</span>
+<span class="font-label">Vault Settings</span>
+</a>
+</nav>
+<div class="mt-auto pt-6">
+<button class="w-full py-4 bg-primary text-on-primary-fixed font-bold rounded-md hover:bg-primary-dim transition-all flex items-center justify-center gap-2 scale-98 active:opacity-80">
+<span class="material-symbols-outlined">add_circle</span>
+                New Transaction
+            </button>
+<div class="mt-6 flex items-center gap-3 px-2">
+<img alt="Vault Admin" class="w-10 h-10 rounded-full border border-outline-variant/30" data-alt="close-up portrait of a professional male digital financial analyst with subtle holographic lighting on his face" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCaUpI9x8S13obH9bYqKB-T_lXJ0Ze9DAP2abCui_x92gI5EZ-YzBTyzSRLZYKdvcRoTKKmb3nMaCJ0AuD7F_F-XNYz2TmQM5nQdKlCxiXowsIiuSke3okqfKXplB5eTAJAR6vn_9Y2OEAE_w-FTRWsnIgMF0XRLXA2hN0gJ1MHakmUOjKeWR0kq_MphNsl5n0LDEaoj_XrCZ2MvSwnHKOpfrl3-zTYYiaHwXGDwEIpxJWbiW4ctHRAeepSJEJbwtEa58Fy7Bh5Zk4"/>
+<div class="flex flex-col">
+<span class="text-sm font-bold text-on-surface">Vault Admin</span>
+<span class="text-[10px] text-on-surface-variant uppercase tracking-tighter">Enterprise Tier</span>
+</div>
+</div>
+</div>
+</aside>
+<!-- TopNavBar -->
+<header class="fixed top-0 right-0 left-0 md:left-72 bg-[#0c0e17] bg-slate-900/40 backdrop-blur-md shadow-2xl shadow-black/50 z-40 flex justify-between items-center px-8 py-4">
+<div class="flex items-center gap-8">
+<div class="relative group">
+<span class="absolute inset-y-0 left-3 flex items-center text-slate-500">
+<span class="material-symbols-outlined text-sm">search</span>
+</span>
+<input class="bg-surface-container-highest border-none text-sm rounded-md pl-10 pr-4 py-2 w-64 focus:ring-1 focus:ring-primary text-on-surface transition-all" placeholder="Search Vault..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-4">
+<button class="text-slate-400 hover:text-cyan-300 transition-all duration-300">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="text-slate-400 hover:text-cyan-300 transition-all duration-300">
+<span class="material-symbols-outlined">account_balance_wallet</span>
+</button>
+<button class="text-slate-400 hover:text-cyan-300 transition-all duration-300">
+<span class="material-symbols-outlined">settings</span>
+</button>
+</div>
+<div class="h-6 w-[1px] bg-outline-variant/30"></div>
+<div class="flex items-center gap-2">
+<span class="text-sm font-bold text-primary tabular-nums">0.0423 BTC</span>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="pt-24 pb-12 px-8 md:ml-72 min-h-screen">
+<!-- Header & Action Bar -->
+<section class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+<div>
+<nav class="flex items-center gap-2 text-[10px] text-on-surface-variant font-bold tracking-[0.2em] uppercase mb-2">
+<span>Relations</span>
+<span class="material-symbols-outlined text-[12px]">chevron_right</span>
+<span class="text-primary">Lead Pipeline</span>
+</nav>
+<h1 class="text-5xl font-black tracking-tighter text-on-surface">Lead Management</h1>
+<p class="text-on-surface-variant mt-2 max-w-lg">Manage high-net-worth investors and venture profiles within the Kinetic Vault ecosystem.</p>
+</div>
+<div class="flex items-center gap-4">
+<button class="px-6 py-3 border border-outline-variant/30 rounded-md text-on-surface font-semibold hover:bg-surface-container-high transition-all flex items-center gap-2">
+<span class="material-symbols-outlined">history_edu</span>
+                    Log Interaction
+                </button>
+<button class="px-6 py-3 bg-primary text-on-primary-fixed rounded-md font-bold hover:bg-primary-dim transition-all flex items-center gap-2 shadow-[0_0_20px_rgba(161,250,255,0.2)]">
+<span class="material-symbols-outlined">person_add</span>
+                    Add New Contact
+                </button>
+</div>
+</section>
+<!-- Metrics Bento Grid -->
+<section class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
+<div class="bg-surface-container-high p-6 rounded-lg relative overflow-hidden group">
+<div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+<span class="material-symbols-outlined text-5xl">groups</span>
+</div>
+<p class="text-xs font-bold text-on-surface-variant uppercase tracking-widest mb-4">Total Leads</p>
+<h3 class="text-4xl font-headline font-bold text-on-surface tabular-nums">1,248</h3>
+<p class="text-[10px] text-secondary mt-2 flex items-center gap-1">
+<span class="material-symbols-outlined text-xs">trending_up</span>
+                    +12% from last month
+                </p>
+</div>
+<div class="bg-surface-container-high p-6 rounded-lg relative overflow-hidden group">
+<div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+<span class="material-symbols-outlined text-5xl">rocket_launch</span>
+</div>
+<p class="text-xs font-bold text-on-surface-variant uppercase tracking-widest mb-4">Active Ops</p>
+<h3 class="text-4xl font-headline font-bold text-on-surface tabular-nums">42</h3>
+<p class="text-[10px] text-primary mt-2 flex items-center gap-1">
+<span class="material-symbols-outlined text-xs">bolt</span>
+                    6 Hot opportunities
+                </p>
+</div>
+<div class="bg-surface-container-high p-6 rounded-lg relative overflow-hidden group">
+<div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+<span class="material-symbols-outlined text-5xl">award_star</span>
+</div>
+<p class="text-xs font-bold text-on-surface-variant uppercase tracking-widest mb-4">Avg. Conversion</p>
+<h3 class="text-4xl font-headline font-bold text-on-surface tabular-nums">8.4%</h3>
+<p class="text-[10px] text-on-surface-variant mt-2 flex items-center gap-1">
+                    Benchmark: 7.2%
+                </p>
+</div>
+<div class="bg-surface-container-low p-6 rounded-lg border border-primary/10 relative overflow-hidden group">
+<p class="text-xs font-bold text-primary uppercase tracking-widest mb-4">Vault Activity</p>
+<h3 class="text-4xl font-headline font-bold text-on-surface tabular-nums">24h</h3>
+<p class="text-[10px] text-secondary mt-2 flex items-center gap-1">
+                    System operating at peak
+                </p>
+<div class="mt-4 flex -space-x-2">
+<img alt="User" class="w-6 h-6 rounded-full border border-surface shadow-sm" data-alt="minimalist avatar icon of a trader" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAkNl3WsADKUIG2nzf2KC7oPSqtkAwKABOvup5SQfRKTcLeGPvpAomK8NIYW5H38uoGe0nVwJ-Dlec2OuGFSuYtTFhRuhB9bw3HBrH7uk-t9GMUBqBSQIC7_Fb_UAjKNO2SfQsFLWHN-XgIq51oPXjDavRY6c42Fh2AczunWcoz7fI2LDa1NIQfpdckbAuZO0Dcqwq_LSyiC7bROomylfD2fx1ObmYJl6KPDwb2RJrPhb_g7wh5_lYhyOqWWxxq606FeEcWrnFZhEE"/>
+<img alt="User" class="w-6 h-6 rounded-full border border-surface shadow-sm" data-alt="minimalist avatar icon of a venture capitalist" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAkB32XWaNfLcKYWzOPRc1FaSNGLcuo7cXy2yhxKkmq0lxnMDgVzuBUGhZm9iOTqBdL02fRb7dwpWQjp3XWaY3OlybV82W9NDG8qgE04evG78p9QcoNK595JZVkYKGnej7dmLvXYIQJl7vceQ9w47-Luhi7G6c3H5HCZ21KWEBc6IFdPQAl2eYn1tcUwVIYMcDtKgUHzJId-4idBjAjtY0yO5nbXsDPqGMXUOq2Z13qiY0K6p9Gprbn2dDaIIY5md3-e5clfTYM99E"/>
+<img alt="User" class="w-6 h-6 rounded-full border border-surface shadow-sm" data-alt="minimalist avatar icon of a crypto analyst" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCB1FwtJsJaDLfYKoWvMHcek3HtgqmHvhBw6R3SiGtsAp9ddVoYMdXW5od09ElDwqzUqgHUmeHfJpf079MZE41Esb-RyjHJfEynBD_c_PtgUeTWFSMiPl-uvF9qHfV1nTBz4b_jpXY1nrmWPtWq07-w0hQ11IxsqpSzcv5G50mq6D0AsLCkRlaq-0gJJTmwmYtcbUUxdRf3Q05JcZpnK8sBkTxD_w1xIFRl_Rn2EAx4stdNpckrmjaluwZjTsTp5VBpW3V-a0p84C0"/>
+<div class="w-6 h-6 rounded-full bg-surface-container-highest border border-surface flex items-center justify-center text-[8px] font-bold">+18</div>
+</div>
+</div>
+</section>
+<!-- Main Data Area -->
+<div class="grid grid-cols-1 xl:grid-cols-3 gap-8">
+<!-- Contact List Table Area -->
+<section class="xl:col-span-2 space-y-6">
+<div class="bg-surface-container-low rounded-lg p-1">
+<!-- Table Header -->
+<div class="grid grid-cols-12 px-6 py-4 text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">
+<div class="col-span-4">Lead Detail</div>
+<div class="col-span-2 text-center">Type</div>
+<div class="col-span-3">Last Interaction</div>
+<div class="col-span-2">Interests</div>
+<div class="col-span-1 text-right">Action</div>
+</div>
+<!-- Table Body -->
+<div class="space-y-1">
+<!-- Lead Row 1 -->
+<div class="grid grid-cols-12 items-center px-6 py-5 rounded-md hover:bg-surface-bright transition-colors cursor-pointer group">
+<div class="col-span-4 flex items-center gap-4">
+<img alt="Lead" class="w-10 h-10 rounded-md object-cover grayscale group-hover:grayscale-0 transition-all" data-alt="Close up portrait of a high net worth male investor in a luxury modern office with neon city lights in the background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD-PDcfwgu-4o4BK0rJMrHA0IWUObHUyZD8mEZlBndDn8Tlb7y128g5ZZ40VoBv4u4j7sykwuO8-OVjqFh0yUN0Thyb-c4hSVra_AOtW53IalbCOsEp73ihwhIS0RICyRUctrUzF9m-GBIryjdtoo3bEXzSQ4CEzIYnBoMKLhpWzDhFbcfhLD-kyXNnLracV6XsW_p5pz4nJA5t_bHgqxgCRJUPAW9UM6Jpafh3sfxixBJFS5vqo-pAy831xdNzhmpyR2DvuaylaYY"/>
+<div>
+<h4 class="font-bold text-on-surface leading-none">Julian Draxler</h4>
+<p class="text-xs text-on-surface-variant mt-1">j.draxler@nexus-funds.vc</p>
+</div>
+</div>
+<div class="col-span-2 flex justify-center">
+<span class="px-3 py-1 bg-secondary/10 text-secondary text-[10px] font-bold rounded-full border border-secondary/20">WHALE</span>
+</div>
+<div class="col-span-3">
+<p class="text-sm text-on-surface tabular-nums">2 hours ago</p>
+<p class="text-[10px] text-on-surface-variant">Wallet Analysis Sync</p>
+</div>
+<div class="col-span-2 flex flex-wrap gap-1">
+<span class="bg-surface-container-highest px-2 py-0.5 rounded text-[9px] font-bold text-primary">BTC</span>
+<span class="bg-surface-container-highest px-2 py-0.5 rounded text-[9px] font-bold text-primary">SOL</span>
+</div>
+<div class="col-span-1 text-right">
+<button class="text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+</div>
+<!-- Lead Row 2 (Selected State Example) -->
+<div class="grid grid-cols-12 items-center px-6 py-5 rounded-md bg-surface-container-high border-l-2 border-primary">
+<div class="col-span-4 flex items-center gap-4">
+<img alt="Lead" class="w-10 h-10 rounded-md object-cover" data-alt="Portrait of a professional young woman tech entrepreneur with sleek glasses and modern aesthetic" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCXvcrrSEhiDqheeRFcwN9o9Xu8YGyvk3_Jl8F9oFQLE4xfCI0RYgEx4Fs-DTrJ8VkAGpNZ__mrAEMAuPccqoU4keA2Waldaui3ND6apqI7Zf7ilm_xd6iY8d7Kj_VNonps7SwoZtFMEjwXJWfG8gusJ_UV5kSbkvU__er_yL-F7slp3t4LXz2GHSHzKJfRAuJPJapRe1Or_dU7kLbAlDSkMm2chTrkPHuogATSvwDwCZILwo9Rfzyqb1_ExStK6Ve0cvHxNiCDUks"/>
+<div>
+<h4 class="font-bold text-on-surface leading-none">Sarah Lockwood</h4>
+<p class="text-xs text-on-surface-variant mt-1">sarah@lockwood.eth</p>
+</div>
+</div>
+<div class="col-span-2 flex justify-center">
+<span class="px-3 py-1 bg-primary/10 text-primary text-[10px] font-bold rounded-full border border-primary/20">RETAIL</span>
+</div>
+<div class="col-span-3">
+<p class="text-sm text-on-surface tabular-nums">Yesterday, 14:20</p>
+<p class="text-[10px] text-on-surface-variant">Newsletter Opt-in</p>
+</div>
+<div class="col-span-2 flex flex-wrap gap-1">
+<span class="bg-surface-container-highest px-2 py-0.5 rounded text-[9px] font-bold text-primary">ETH</span>
+</div>
+<div class="col-span-1 text-right">
+<button class="text-primary transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+</div>
+<!-- Lead Row 3 -->
+<div class="grid grid-cols-12 items-center px-6 py-5 rounded-md hover:bg-surface-bright transition-colors cursor-pointer group">
+<div class="col-span-4 flex items-center gap-4">
+<img alt="Lead" class="w-10 h-10 rounded-md object-cover grayscale group-hover:grayscale-0 transition-all" data-alt="Abstract minimalist representation of a venture capital firm logo in neon cyan and deep black" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCTH6t1mV9ErRskv24mILIMmdex8WeR6DWPDCIiGKIuSAPjQDDLMUwrSHSIPK3dcFFbrFYDxm4HQH1XzDZDUSFsV_8g1hxvuEg_h24e7Oc1zDOl4as6jdNcNlnoXnwLXfpgc6Siw-0-wxI0padLaYGOIiSO7k_4cc2hsyb9sOLw9_EPm2XKuyxyue_6fYZrj62EGjwd76N3bFFjmrxpkQ9QxjUpJCg1bgYMQut4vj8f0J8Y62nUJDzCZ9NP65xL-9sLtZF2xYCR-h8"/>
+<div>
+<h4 class="font-bold text-on-surface leading-none">Vanguard Capital</h4>
+<p class="text-xs text-on-surface-variant mt-1">ops@vanguard-cap.io</p>
+</div>
+</div>
+<div class="col-span-2 flex justify-center">
+<span class="px-3 py-1 bg-tertiary/10 text-tertiary text-[10px] font-bold rounded-full border border-tertiary/20">VC</span>
+</div>
+<div class="col-span-3">
+<p class="text-sm text-on-surface tabular-nums">Oct 12, 2023</p>
+<p class="text-[10px] text-on-surface-variant">Seed Round Inquiry</p>
+</div>
+<div class="col-span-2 flex flex-wrap gap-1">
+<span class="bg-surface-container-highest px-2 py-0.5 rounded text-[9px] font-bold text-primary">DOT</span>
+<span class="bg-surface-container-highest px-2 py-0.5 rounded text-[9px] font-bold text-primary">LINK</span>
+</div>
+<div class="col-span-1 text-right">
+<button class="text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+</div>
+<!-- Lead Row 4 -->
+<div class="grid grid-cols-12 items-center px-6 py-5 rounded-md hover:bg-surface-bright transition-colors cursor-pointer group">
+<div class="col-span-4 flex items-center gap-4">
+<img alt="Lead" class="w-10 h-10 rounded-md object-cover grayscale group-hover:grayscale-0 transition-all" data-alt="Close up of a sophisticated male investor with a sharp suit, cinematic lighting from the side" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAgCIqtNR1Is1TSChP80rAgHeCBqbQHy1KxMREcG-jK6t4wyEXOITEOy1l0E__oo0il1X6Rqk4OKipyu5HvfkpHp6mkJ6DmJXvyAIdHQgAHAiL5NtgtGKkc0ObsMXh9RgN7vM72h0uzEamINfHmmQ5Jw0TFe33JzUx0kSQkcMEbL8zRqKravAApvRl4wIB36vyMg7kMs0zkuxCjWA6aPSBHQ7gARxQnvV7TEYu3G_rU8mV0mznb21RKMrBvSZTksHDlpbZLBIVnUWs"/>
+<div>
+<h4 class="font-bold text-on-surface leading-none">Arturo Mendez</h4>
+<p class="text-xs text-on-surface-variant mt-1">mendez.a@private.com</p>
+</div>
+</div>
+<div class="col-span-2 flex justify-center">
+<span class="px-3 py-1 bg-secondary/10 text-secondary text-[10px] font-bold rounded-full border border-secondary/20">WHALE</span>
+</div>
+<div class="col-span-3">
+<p class="text-sm text-on-surface tabular-nums">3 days ago</p>
+<p class="text-[10px] text-on-surface-variant">Cold Outreach</p>
+</div>
+<div class="col-span-2 flex flex-wrap gap-1">
+<span class="bg-surface-container-highest px-2 py-0.5 rounded text-[9px] font-bold text-primary">ETH</span>
+<span class="bg-surface-container-highest px-2 py-0.5 rounded text-[9px] font-bold text-primary">ARB</span>
+</div>
+<div class="col-span-1 text-right">
+<button class="text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Detailed Perspective Sidebar -->
+<aside class="xl:col-span-1 space-y-6">
+<div class="bg-surface-container-high rounded-lg p-8 relative overflow-hidden border border-outline-variant/10">
+<div class="absolute top-0 right-0 w-32 h-32 bg-primary/5 blur-3xl -mr-16 -mt-16"></div>
+<div class="flex justify-between items-start mb-8">
+<img alt="Selected Lead" class="w-20 h-20 rounded-lg shadow-2xl" data-alt="Full portrait of a professional woman entrepreneur with a clean background and high contrast studio lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAcgMJ9uoZzuQhGLfg6pqApT73slzodLs910wmcTojRqgSXJztM3QEZw2lgDFofxiVWUOwUVa_qp3kOF4Sz5TySagGvAuoCcYZj39LNdca7UVpXb1ZMNCyRI-kduSAXZrIDcJ4MOnMoCixmQ48VwOj7RCDrKF9iaM37YMDRCNdPqqWUH2pMqFL4R4Ln2tTpmvW30kF7hsgwCx6a_HLdT3vCSaFhOWEy16g8eBYLRXsko4ROr47gGA7KSNGXtjwIkQAlzx-UZ6fs7Hc"/>
+<div class="flex gap-2">
+<button class="w-8 h-8 rounded-full bg-surface-container-highest flex items-center justify-center text-primary hover:bg-primary hover:text-on-primary-fixed transition-all">
+<span class="material-symbols-outlined text-sm">edit</span>
+</button>
+<button class="w-8 h-8 rounded-full bg-surface-container-highest flex items-center justify-center text-error hover:bg-error hover:text-white transition-all">
+<span class="material-symbols-outlined text-sm">delete</span>
+</button>
+</div>
+</div>
+<h2 class="text-2xl font-headline font-bold text-on-surface mb-1">Sarah Lockwood</h2>
+<p class="text-primary text-xs font-bold tracking-widest uppercase mb-6">Platinum Retail Lead</p>
+<div class="space-y-4 mb-8">
+<div class="flex justify-between items-center py-2 border-b border-outline-variant/10">
+<span class="text-xs text-on-surface-variant">Holding Estimate</span>
+<span class="text-sm font-bold text-on-surface tabular-nums">$142,500.00</span>
+</div>
+<div class="flex justify-between items-center py-2 border-b border-outline-variant/10">
+<span class="text-xs text-on-surface-variant">Engagement Score</span>
+<div class="flex items-center gap-2">
+<div class="w-16 h-1.5 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-secondary w-4/5"></div>
+</div>
+<span class="text-[10px] font-bold text-secondary">88%</span>
+</div>
+</div>
+<div class="flex justify-between items-center py-2">
+<span class="text-xs text-on-surface-variant">Risk Profile</span>
+<span class="text-sm font-bold text-tertiary">Moderate</span>
+</div>
+</div>
+<div class="mb-8">
+<h5 class="text-[10px] font-black text-on-surface-variant uppercase tracking-widest mb-4">Interested Coins</h5>
+<div class="flex flex-wrap gap-2">
+<div class="flex items-center gap-2 bg-surface-container-low px-3 py-1.5 rounded-md border border-outline-variant/10">
+<img alt="ETH" class="w-4 h-4" data-alt="Ethereum digital icon in subtle neon blue" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDJrnZ7Ajmlqj9zl3JE5e7qMe6qYFSb-55VVEtY_sbECSWlnmt_-nqYhaKGucHYC-ClaphUTauKUdnRi-eRBUGp8uSaquhixJTPO6P28NYpyxcVJSIYSYvAg6VCH7lPm_1vPZB1n1CVUSeuxyMhd81zSKRopI9Ad2nYLEL7lEjttwJjV7D1TuZf-q0eHDaSBKJGog_zOcDGlbyl3HuAdPeioK928gPDCr1OjVVQdX5VPr8FuWYRyedmDlv5a5EAfHFRL3koujrjImI"/>
+<span class="text-[10px] font-bold text-on-surface">Ethereum</span>
+</div>
+<div class="flex items-center gap-2 bg-surface-container-low px-3 py-1.5 rounded-md border border-outline-variant/10">
+<img alt="POL" class="w-4 h-4" data-alt="Polygon crypto token icon in purple gradient" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCN62Lb6SkmiVtC28p8Isgeb0dmhEEYbGNGijZQOxYAVDeblYQtWZFaQ_UV-B5iIoX6WjCmQ48vRy7EZtgx-GEvuYJMs-kvw0qVoeoRx9BtVNii1WFYbrGtbjJWmLA6ibUud1lrXbkIzoOleWrTmBuS3G9kYQ399-lGSMShffowa3OwiL8geKKx036Z35Nmpht62DLW3_ZWyiylffI2mTYIuIWzRGwy1842IUEUwq_y0X9TmCyMcEq_3Uc2wecwNLpQECxK4HZYuKc"/>
+<span class="text-[10px] font-bold text-on-surface">Polygon</span>
+</div>
+</div>
+</div>
+<button class="w-full py-3 bg-surface-container-highest text-primary font-bold rounded-md hover:bg-primary/10 transition-all border border-primary/20">
+                        View Interaction Timeline
+                    </button>
+</div>
+<div class="bg-[#0c0e17] rounded-lg p-6 border border-outline-variant/10">
+<h5 class="text-[10px] font-black text-on-surface-variant uppercase tracking-widest mb-4">Upcoming Tasks</h5>
+<div class="space-y-4">
+<div class="flex gap-4">
+<div class="w-1 h-8 bg-primary rounded-full"></div>
+<div>
+<p class="text-xs font-bold text-on-surface">Quarterly Rebalance Call</p>
+<p class="text-[10px] text-on-surface-variant">Tomorrow at 10:00 AM</p>
+</div>
+</div>
+<div class="flex gap-4">
+<div class="w-1 h-8 bg-tertiary rounded-full"></div>
+<div>
+<p class="text-xs font-bold text-on-surface">KYC Documents Review</p>
+<p class="text-[10px] text-on-surface-variant">Oct 15, 2023</p>
+</div>
+</div>
+</div>
+</div>
+</aside>
+</div>
+</main>
+<!-- Bottom Navigation (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 left-0 right-0 bg-[#0c0e17] bg-slate-900/40 backdrop-blur-md flex justify-around items-center py-3 z-50">
+<button class="flex flex-col items-center gap-1 text-slate-400">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-[10px] font-medium">Home</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-cyan-400">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">hub</span>
+<span class="text-[10px] font-bold">Leads</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-slate-400">
+<span class="material-symbols-outlined">query_stats</span>
+<span class="text-[10px] font-medium">Pulse</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-slate-400">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-[10px] font-medium">Settings</span>
+</button>
+</nav>
+</body></html>

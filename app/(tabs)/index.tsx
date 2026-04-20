@@ -1,98 +1,325 @@
-import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
+import { ActivityIndicator, Pressable, StyleSheet, Text, View } from 'react-native';
 
-import { HelloWave } from '@/components/hello-wave';
-import ParallaxScrollView from '@/components/parallax-scroll-view';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { Link } from 'expo-router';
+import { useCryptoCrm } from '@/components/crm/crypto-crm-provider';
+import {
+  ChangePill,
+  CoinAvatar,
+  formatCompactNumber,
+  formatCurrency,
+  formatPercent,
+  Panel,
+  SectionTitle,
+  Shell,
+  StatCard,
+} from '@/components/crm/ui';
+import { CRM_COLORS } from '@/constants/crm';
 
-export default function HomeScreen() {
+export default function DashboardScreen() {
+  const { error, global, isLoading, portfolio, refetch, trending } = useCryptoCrm();
+
+  const totalValue = portfolio.reduce((sum, coin) => sum + coin.value, 0);
+  const liquidValue = portfolio
+    .filter((coin) => coin.bucket === 'Liquid Assets')
+    .reduce((sum, coin) => sum + coin.value, 0);
+  const lockedValue = portfolio
+    .filter((coin) => coin.bucket === 'Locked Vaults')
+    .reduce((sum, coin) => sum + coin.value, 0);
+
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
+    <Shell
+      title="Dashboard"
+      action={
+        <Pressable onPress={() => void refetch()} style={styles.refreshButton}>
+          <Text style={styles.refreshButtonText}>Refresh Live Feed</Text>
+        </Pressable>
       }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12',
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <Link href="/modal">
-          <Link.Trigger>
-            <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-          </Link.Trigger>
-          <Link.Preview />
-          <Link.Menu>
-            <Link.MenuAction title="Action" icon="cube" onPress={() => alert('Action pressed')} />
-            <Link.MenuAction
-              title="Share"
-              icon="square.and.arrow.up"
-              onPress={() => alert('Share pressed')}
-            />
-            <Link.Menu title="More" icon="ellipsis">
-              <Link.MenuAction
-                title="Delete"
-                icon="trash"
-                destructive
-                onPress={() => alert('Delete pressed')}
-              />
-            </Link.Menu>
-          </Link.Menu>
-        </Link>
+      {isLoading ? (
+        <LoadingState />
+      ) : error ? (
+        <ErrorState error={error} onRetry={() => void refetch()} />
+      ) : (
+        <>
+          <View style={styles.heroRow}>
+            <Panel style={styles.heroPanel}>
+              <Text style={styles.heroLabel}>Total Portfolio Value</Text>
+              <Text style={styles.heroValue}>{formatCurrency(totalValue)}</Text>
+              <View style={styles.heroMeta}>
+                <ChangePill value={global?.market_cap_change_percentage_24h_usd} />
+                <Text style={styles.heroMetaText}>
+                  {formatCurrency(global?.total_volume.usd, true)} traded across tracked markets in
+                  the last 24 hours.
+                </Text>
+              </View>
+              <View style={styles.heroStats}>
+                <MetricBlock label="Liquid Assets" value={formatCurrency(liquidValue, true)} />
+                <MetricBlock label="Locked Vaults" value={formatCurrency(lockedValue, true)} />
+                <MetricBlock
+                  label="Risk Index"
+                  value={totalValue > 0 && lockedValue / totalValue > 0.5 ? 'Medium-High' : 'Balanced'}
+                />
+              </View>
+            </Panel>
 
-        <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          {`When you're ready, run `}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+            <Panel style={styles.trendingPanel}>
+              <SectionTitle
+                title="Trending Assets"
+                description="CoinGecko `/search/trending` demo feed"
+              />
+              <View style={styles.list}>
+                {trending.slice(0, 5).map((coin) => (
+                  <View key={coin.id} style={styles.assetRow}>
+                    <View style={styles.assetInfo}>
+                      <CoinAvatar image={coin.thumb} symbol={coin.symbol} />
+                      <View>
+                        <Text style={styles.assetName}>{coin.name}</Text>
+                        <Text style={styles.assetMeta}>{coin.symbol}/USD</Text>
+                      </View>
+                    </View>
+                    <View style={styles.assetPriceWrap}>
+                      <Text style={styles.assetPrice}>{formatCurrency(coin.price ?? 0, true)}</Text>
+                      <Text
+                        style={[
+                          styles.assetDelta,
+                          { color: (coin.change24h ?? 0) >= 0 ? CRM_COLORS.success : CRM_COLORS.danger },
+                        ]}>
+                        {formatPercent(coin.change24h)}
+                      </Text>
+                    </View>
+                  </View>
+                ))}
+              </View>
+            </Panel>
+          </View>
+
+          <View style={styles.statsGrid}>
+            <StatCard
+              icon="public"
+              label="Total Market Cap"
+              value={formatCurrency(global?.total_market_cap.usd, true)}
+              detail={formatPercent(global?.market_cap_change_percentage_24h_usd)}
+              accent={CRM_COLORS.success}
+            />
+            <StatCard
+              icon="query-stats"
+              label="24h Volume"
+              value={formatCurrency(global?.total_volume.usd, true)}
+              detail={`${formatCompactNumber(global?.markets)} active exchanges`}
+            />
+            <StatCard
+              icon="token"
+              label="BTC Dominance"
+              value={`${(global?.market_cap_percentage.btc ?? 0).toFixed(1)}%`}
+              detail={`${(global?.active_cryptocurrencies ?? 0).toLocaleString()} active cryptocurrencies`}
+            />
+          </View>
+
+          <Panel>
+            <SectionTitle
+              title="Top Holdings"
+              description="Largest portfolio positions priced from CoinGecko `/coins/markets`."
+            />
+            <View style={styles.list}>
+              {portfolio.slice(0, 4).map((coin) => (
+                <View key={coin.id} style={styles.holdingRow}>
+                  <View style={styles.assetInfo}>
+                    <CoinAvatar image={coin.image} symbol={coin.symbol} size={44} />
+                    <View>
+                      <Text style={styles.assetName}>{coin.name}</Text>
+                      <Text style={styles.assetMeta}>
+                        {coin.units.toLocaleString()} {coin.symbol}
+                      </Text>
+                    </View>
+                  </View>
+                  <View style={styles.holdingValue}>
+                    <Text style={styles.assetPrice}>{formatCurrency(coin.value)}</Text>
+                    <Text style={styles.assetMeta}>{coin.bucket}</Text>
+                  </View>
+                  <ChangePill value={coin.change24h} />
+                </View>
+              ))}
+            </View>
+          </Panel>
+        </>
+      )}
+    </Shell>
+  );
+}
+
+function MetricBlock({ label, value }: { label: string; value: string }) {
+  return (
+    <View style={styles.metricBlock}>
+      <Text style={styles.metricLabel}>{label}</Text>
+      <Text style={styles.metricValue}>{value}</Text>
+    </View>
+  );
+}
+
+function LoadingState() {
+  return (
+    <Panel style={styles.statePanel}>
+      <ActivityIndicator color={CRM_COLORS.primary} />
+      <Text style={styles.stateTitle}>Loading CoinGecko data</Text>
+      <Text style={styles.stateText}>Fetching global markets, trending assets, and tracked holdings.</Text>
+    </Panel>
+  );
+}
+
+function ErrorState({ error, onRetry }: { error: string; onRetry: () => void }) {
+  return (
+    <Panel style={styles.statePanel}>
+      <Text style={styles.stateTitle}>Live data unavailable</Text>
+      <Text style={styles.stateText}>{error}</Text>
+      <Pressable onPress={onRetry} style={styles.refreshButton}>
+        <Text style={styles.refreshButtonText}>Retry</Text>
+      </Pressable>
+    </Panel>
   );
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
+  refreshButton: {
+    backgroundColor: CRM_COLORS.primary,
+    paddingHorizontal: 18,
+    paddingVertical: 12,
+    borderRadius: 999,
+  },
+  refreshButtonText: {
+    color: '#004346',
+    fontWeight: '900',
+    fontSize: 12,
+    letterSpacing: 0.8,
+    textTransform: 'uppercase',
+  },
+  heroRow: {
+    flexDirection: 'row',
+    gap: 20,
+    flexWrap: 'wrap',
+  },
+  heroPanel: {
+    flex: 2,
+    minWidth: 320,
+    gap: 18,
+  },
+  heroLabel: {
+    color: CRM_COLORS.textMuted,
+    fontSize: 12,
+    textTransform: 'uppercase',
+    letterSpacing: 2.2,
+    fontWeight: '800',
+  },
+  heroValue: {
+    color: CRM_COLORS.text,
+    fontSize: 44,
+    fontWeight: '900',
+  },
+  heroMeta: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
+    gap: 12,
+    flexWrap: 'wrap',
   },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
+  heroMetaText: {
+    color: CRM_COLORS.textMuted,
+    fontSize: 13,
+    flexShrink: 1,
   },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
+  heroStats: {
+    borderTopWidth: StyleSheet.hairlineWidth,
+    borderTopColor: CRM_COLORS.borderSoft,
+    paddingTop: 18,
+    flexDirection: 'row',
+    gap: 20,
+    flexWrap: 'wrap',
+  },
+  metricBlock: {
+    minWidth: 120,
+    gap: 6,
+  },
+  metricLabel: {
+    color: CRM_COLORS.textSoft,
+    fontSize: 11,
+    textTransform: 'uppercase',
+    letterSpacing: 1.6,
+    fontWeight: '800',
+  },
+  metricValue: {
+    color: CRM_COLORS.text,
+    fontSize: 20,
+    fontWeight: '800',
+  },
+  trendingPanel: {
+    flex: 1,
+    minWidth: 280,
+  },
+  list: {
+    gap: 14,
+  },
+  assetRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    gap: 12,
+  },
+  assetInfo: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    flex: 1,
+  },
+  assetName: {
+    color: CRM_COLORS.text,
+    fontSize: 15,
+    fontWeight: '800',
+  },
+  assetMeta: {
+    color: CRM_COLORS.textMuted,
+    fontSize: 12,
+    marginTop: 2,
+  },
+  assetPriceWrap: {
+    alignItems: 'flex-end',
+  },
+  assetPrice: {
+    color: CRM_COLORS.text,
+    fontSize: 16,
+    fontWeight: '800',
+  },
+  assetDelta: {
+    fontSize: 12,
+    fontWeight: '700',
+    marginTop: 2,
+  },
+  statsGrid: {
+    flexDirection: 'row',
+    gap: 20,
+    flexWrap: 'wrap',
+  },
+  holdingRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: 16,
+    flexWrap: 'wrap',
+  },
+  holdingValue: {
+    minWidth: 140,
+    alignItems: 'flex-end',
+  },
+  statePanel: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    minHeight: 260,
+    gap: 10,
+  },
+  stateTitle: {
+    color: CRM_COLORS.text,
+    fontSize: 20,
+    fontWeight: '800',
+  },
+  stateText: {
+    color: CRM_COLORS.textMuted,
+    fontSize: 14,
+    textAlign: 'center',
+    maxWidth: 520,
   },
 });
