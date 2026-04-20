@@ -1,6 +1,6 @@
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { Image } from 'expo-image';
-import { PropsWithChildren, ReactNode } from 'react';
+import { PropsWithChildren, ReactNode, useState } from 'react';
 import {
   Pressable,
   ScrollView,
@@ -64,55 +64,82 @@ export function Shell({
   const router = useRouter();
   const { width } = useWindowDimensions();
   const isDesktop = width >= 1080;
+  const [drawerOpen, setDrawerOpen] = useState(false);
+
+  function handleNavPress(href: NavItem['href']) {
+    router.push(href);
+    setDrawerOpen(false);
+  }
+
+  const sidebarContent = (
+    <>
+      <View>
+        <View style={styles.brandRow}>
+          <View style={styles.brandIcon}>
+            <MaterialIcons color="#004346" name="account-balance" size={20} />
+          </View>
+          <View>
+            <Text style={styles.brandTitle}>EM Capital</Text>
+            <Text style={styles.brandSubtitle}>Crypto CRM</Text>
+          </View>
+        </View>
+
+        <View style={styles.navList}>
+          {NAV_ITEMS.map((item) => {
+            const active = pathname === item.href;
+
+            return (
+              <Pressable
+                key={item.href}
+                onPress={() => handleNavPress(item.href)}
+                style={[styles.navItem, active && styles.navItemActive]}>
+                <MaterialIcons
+                  color={active ? CRM_COLORS.primary : CRM_COLORS.textMuted}
+                  name={item.icon}
+                  size={20}
+                />
+                <Text style={[styles.navLabel, active && styles.navLabelActive]}>
+                  {item.label}
+                </Text>
+              </Pressable>
+            );
+          })}
+        </View>
+      </View>
+
+      <View style={styles.sidebarFooter}>
+        <Text style={styles.footerTitle}>CRM Snapshot</Text>
+        <Text style={styles.footerText}>{CRM_LEADS.length} active investor profiles</Text>
+        <Text style={styles.footerText}>6 hot opportunities in motion</Text>
+      </View>
+    </>
+  );
 
   return (
     <View style={styles.screen}>
       {isDesktop ? (
-        <View style={styles.sidebar}>
-          <View>
-            <View style={styles.brandRow}>
-              <View style={styles.brandIcon}>
-                <MaterialIcons color="#004346" name="account-balance" size={20} />
-              </View>
-              <View>
-                <Text style={styles.brandTitle}>EM Capital</Text>
-                <Text style={styles.brandSubtitle}>Crypto CRM</Text>
-              </View>
-            </View>
+        <View style={styles.sidebar}>{sidebarContent}</View>
+      ) : null}
 
-            <View style={styles.navList}>
-              {NAV_ITEMS.map((item) => {
-                const active = pathname === item.href;
-
-                return (
-                  <Pressable
-                    key={item.href}
-                    onPress={() => router.push(item.href)}
-                    style={[styles.navItem, active && styles.navItemActive]}>
-                    <MaterialIcons
-                      color={active ? CRM_COLORS.primary : CRM_COLORS.textMuted}
-                      name={item.icon}
-                      size={20}
-                    />
-                    <Text style={[styles.navLabel, active && styles.navLabelActive]}>
-                      {item.label}
-                    </Text>
-                  </Pressable>
-                );
-              })}
-            </View>
+      {!isDesktop && drawerOpen ? (
+        <>
+          <Pressable style={styles.drawerBackdrop} onPress={() => setDrawerOpen(false)} />
+          <View style={[styles.sidebar, styles.drawerOverlay]}>
+            <Pressable style={styles.drawerClose} onPress={() => setDrawerOpen(false)}>
+              <MaterialIcons color={CRM_COLORS.textMuted} name="close" size={20} />
+            </Pressable>
+            {sidebarContent}
           </View>
-
-          <View style={styles.sidebarFooter}>
-            <Text style={styles.footerTitle}>CRM Snapshot</Text>
-            <Text style={styles.footerText}>{CRM_LEADS.length} active investor profiles</Text>
-            <Text style={styles.footerText}>6 hot opportunities in motion</Text>
-          </View>
-        </View>
+        </>
       ) : null}
 
       <View style={styles.contentWrap}>
         <View style={styles.topBar}>
+          {!isDesktop ? (
+            <Pressable style={styles.headerIcon} onPress={() => setDrawerOpen(true)}>
+              <MaterialIcons color={CRM_COLORS.textMuted} name="menu" size={18} />
+            </Pressable>
+          ) : null}
           <View style={styles.searchBox}>
             <MaterialIcons color={CRM_COLORS.textSoft} name="search" size={18} />
             <TextInput
@@ -367,6 +394,27 @@ const styles = StyleSheet.create({
   footerText: {
     color: CRM_COLORS.textMuted,
     fontSize: 12,
+  },
+  drawerOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    bottom: 0,
+    zIndex: 100,
+  },
+  drawerBackdrop: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(0,0,0,0.55)',
+    zIndex: 99,
+  },
+  drawerClose: {
+    alignSelf: 'flex-end',
+    padding: 4,
+    marginBottom: 8,
   },
   contentWrap: {
     flex: 1,
